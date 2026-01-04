@@ -52,7 +52,7 @@ export default function Hero() {
           </motion.div>
 
           {/* Main Headlines */}
-          <div className="flex flex-col space-y-2 md:space-y-4 mb-16 md:mb-20">
+          <div className="flex flex-col space-y-6 md:space-y-8 mb-16 md:mb-20">
             <motion.h1
               variants={itemVariants}
               className={`${typography.display.md} ${colors.text.primary}`}

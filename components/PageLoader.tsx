@@ -29,7 +29,7 @@ export default function PageLoader() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.3 }}
-            className="text-[#00FF41] text-4xl md:text-6xl font-bold"
+            className="text-[var(--accent-color)] text-4xl md:text-6xl font-bold"
           >
             LOADING...
           </motion.div>

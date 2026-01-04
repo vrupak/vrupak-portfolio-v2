@@ -9,12 +9,12 @@ import { motion } from "framer-motion";
 
 export default function FeaturedWork() {
   return (
-    <Section id="work" variant="none" className="relative overflow-hidden bg-neutral-900 flex items-center justify-center">
+    <Section id="work" variant="none" className="relative overflow-hidden bg-neutral-900 flex items-center justify-center min-h-[50vh]">
       {/* Texture overlay */}
       <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIiAvPjwvc3ZnPg==')] pointer-events-none"></div>
 
       <div className="w-full max-w-6xl mx-auto px-8 md:px-16 lg:px-24">
-        <div className="flex flex-col items-center relative z-10 text-center pt-32 md:pt-48 lg:pt-64 pb-20 md:pb-28 lg:pb-36">
+        <div className="flex flex-col items-center relative z-10 text-center pt-40 md:pt-56 lg:pt-72 pb-32 md:pb-40 lg:pb-48">
           {/* Section Title */}
           <motion.h2
             initial={{ opacity: 0, y: 30 }}

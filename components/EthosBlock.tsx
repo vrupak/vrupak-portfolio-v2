@@ -13,7 +13,7 @@ export default function EthosBlocks() {
         <Section
           key={block.id}
           variant="none"
-          className={`relative overflow-hidden flex items-center justify-center ${
+          className={`relative overflow-hidden flex items-center justify-center min-h-[50vh] ${
             idx === 0 ? "bg-gradient-to-b from-neutral-100 to-neutral-50" : "bg-neutral-800"
           }`}
         >
@@ -26,7 +26,7 @@ export default function EthosBlocks() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="flex flex-col items-center text-center relative z-10 pt-32 md:pt-48 lg:pt-64 pb-20 md:pb-28 lg:pb-36"
+              className="flex flex-col items-center text-center relative z-10 pt-40 md:pt-56 lg:pt-72 pb-32 md:pb-40 lg:pb-48"
             >
               {/* Headline with line breaks as design element */}
               <h2

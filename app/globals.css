@@ -41,8 +41,8 @@ html {
 body {
   font-family: var(--font-body), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
-  background-color: #fafafa;
-  color: #171717;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 /* Display font for headlines */
