@@ -3,7 +3,7 @@ import { typography, colors, spacing, transitions } from "@/styles/design-tokens
 import Container from "./ui/Container";
 
 export default function Footer() {
-  const linkStyles = `${typography.body.sm} ${colors.text.secondary} hover:${colors.text.primary.replace("text-", "")} ${transitions.default}`;
+  const linkStyles = `${typography.body.sm} ${colors.text.secondary} hover:${colors.text.primary.replace("text-", "")} ${transitions.default} relative inline-block hover:-translate-y-0.5 transition-transform duration-200 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current after:transition-all after:duration-300 hover:after:w-full`;
 
   return (
     <footer className={`${spacing.section.compact} ${colors.border.secondary} border-t-2`}>

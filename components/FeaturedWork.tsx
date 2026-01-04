@@ -17,42 +17,43 @@ export default function FeaturedWork() {
         <div className="flex flex-col items-center relative z-10 text-center pt-40 md:pt-56 lg:pt-72 pb-32 md:pb-40 lg:pb-48">
           {/* Section Title */}
           <motion.h2
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className={`${typography.heading.xl} ${colors.text.inverse} mb-24 md:mb-32`}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            className={`${typography.heading.xl} ${colors.text.inverse} mb-16 md:mb-20`}
           >
-            <span className={`${colors.accent.primary} drop-shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)] underline decoration-4 underline-offset-8`}>FEATURED</span>
+            <span className={`${colors.accent.primary} drop-shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)]`}>FEATURED</span>
           </motion.h2>
 
           {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 lg:gap-x-28 gap-y-20 md:gap-y-24 w-full">
             {featuredProjects.map((project, index) => (
-              <motion.div
+              <motion.a
                 key={project.id}
-                initial={{ opacity: 0, y: 30 }}
+                href={project.url || "#"}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group cursor-pointer text-left"
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
+                className="group cursor-pointer text-left block hover:-translate-y-1 transition-transform duration-200"
               >
-                <p className={`${typography.label.md} ${colors.text.tertiary} mb-5`}>
+                <p className={`${typography.label.md} ${colors.text.tertiary} mb-5 transition-colors duration-150`}>
                   {project.type}
                 </p>
-                <h3 className={`${typography.heading.sm} ${colors.text.inverse} group-hover:${colors.accent.primary.replace('text-', '')} transition-colors border-b-2 ${colors.accent.border} pb-6`}>
+                <h3 className={`${typography.heading.sm} ${colors.text.inverse} group-hover:${colors.accent.primary.replace('text-', '')} transition-colors duration-150 border-b-2 border-neutral-700 group-hover:border-cyan-400 pb-6`}>
                   {project.title}
                 </h3>
-              </motion.div>
+              </motion.a>
             ))}
           </div>
 
           {/* CTA */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, delay: 0.6, ease: "easeOut" }}
             style={{ marginTop: '64px' }}
           >
             <Button href="#work" variant="light">

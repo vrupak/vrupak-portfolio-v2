@@ -2,6 +2,7 @@ export interface Project {
   id: string;
   title: string;
   type: string;
+  url?: string;
 }
 
 export interface NavLink {

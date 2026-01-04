@@ -19,7 +19,7 @@ export default function Button({
   return (
     <a
       href={href}
-      className={`font-display inline-block relative overflow-hidden uppercase ${className}`}
+      className={`font-display inline-block relative overflow-hidden uppercase transition-transform duration-200 hover:-translate-y-1 ${className}`}
       style={{
         padding: '10px 24px',
         fontSize: 'clamp(1.25rem, 2.5vw, 1.875rem)',

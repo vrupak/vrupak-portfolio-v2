@@ -8,10 +8,10 @@ export const heroContent = {
 };
 
 export const featuredProjects: Project[] = [
-  { id: "1", type: "Open Source", title: "MEMORYGRAPH - SUPERMEMORY AI" },
-  { id: "2", type: "AI Engineering", title: "PULSE AI - GRAPH RAG SYSTEM" },
-  { id: "3", type: "VR/Game Dev", title: "STRANGER THINGS VR CAMP" },
-  { id: "4", type: "Software Engineering", title: "KAFKA INTEGRATION - STEELARTT" },
+  { id: "1", type: "Open Source", title: "MEMORYGRAPH - SUPERMEMORY AI", url: "#project-1" },
+  { id: "2", type: "AI Engineering", title: "PULSE AI - GRAPH RAG SYSTEM", url: "#project-2" },
+  { id: "3", type: "VR/Game Dev", title: "STRANGER THINGS VR CAMP", url: "#project-3" },
+  { id: "4", type: "Software Engineering", title: "KAFKA INTEGRATION - STEELARTT", url: "#project-4" },
 ];
 
 export const ethosBlocks: EthosBlock[] = [

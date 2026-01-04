@@ -21,56 +21,57 @@ export default function EthosBlocks() {
           <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjbm9pc2UpIiAvPjwvc3ZnPg==')] pointer-events-none"></div>
 
           <div className="w-full max-w-6xl mx-auto px-8 md:px-16 lg:px-24">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="flex flex-col items-center text-center relative z-10 pt-40 md:pt-56 lg:pt-72 pb-32 md:pb-40 lg:pb-48"
-            >
-              {/* Headline with line breaks as design element */}
-              <h2
-                className={`${typography.display.sm} ${
-                  idx === 0 ? colors.text.primary : colors.text.inverse
-                } mb-16 md:mb-20`}
+            <div className="flex flex-col items-center text-center relative z-10 pt-40 md:pt-56 lg:pt-72 pb-32 md:pb-40 lg:pb-48">
+              {/* Headline with line breaks as design element - staggered animation */}
+              <motion.h2
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                className={`${typography.display.sm} mb-16 md:mb-20`}
+                style={{ fontWeight: 600 }}
               >
-                {block.headline.split(" ").map((word, i, arr) => (
-                  <span key={i}>
-                    {word === "SAY." || word === "I" || word === "WHAT" ? (
-                      <span className={`${colors.accent.primary} drop-shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)]`}>{word}</span>
-                    ) : (
-                      word
-                    )}
-                    {i < arr.length - 1 && (
-                      <>
-                        {i === arr.length - 2 ? (
-                          <>
-                            <br className="hidden md:block" />{" "}
-                          </>
-                        ) : (
-                          " "
-                        )}
-                      </>
-                    )}
-                  </span>
-                ))}
-              </h2>
+                {block.headline.split(" ").map((word, i, arr) => {
+                  // Flip the pattern so odd words get accent
+                  const isAccent = i % 2 === 1;
+                  const baseColor = idx === 0 ? colors.text.primary : colors.text.inverse;
+
+                  return (
+                    <motion.span
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.5, delay: i * 0.08, ease: "easeOut" }}
+                      style={{ display: 'inline-block' }}
+                      className={isAccent ? `${colors.accent.primary} drop-shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)]` : baseColor}
+                    >
+                      {word}
+                      {i < arr.length - 1 && " "}
+                    </motion.span>
+                  );
+                })}
+              </motion.h2>
 
               {/* Description */}
-              <p
+              <motion.p
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
                 className={`${typography.body.xl} ${
                   idx === 0 ? colors.text.secondary : "text-neutral-300"
                 } max-w-4xl`}
               >
                 {block.description}
-              </p>
+              </motion.p>
 
               {/* CTA */}
               <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
                 style={{ marginTop: '64px' }}
               >
                 <Button
@@ -80,7 +81,7 @@ export default function EthosBlocks() {
                   {block.ctaText} →
                 </Button>
               </motion.div>
-            </motion.div>
+            </div>
           </div>
         </Section>
       ))}
