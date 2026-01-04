@@ -1,17 +1,27 @@
-# Portfolio
+# Vrupak Portfolio
+
+Modern portfolio website.
 
 ## Tech Stack
 
-- Next.js 16
+- Next.js 16 (App Router)
 - React 19
 - TypeScript
-- Tailwind CSS
+- Tailwind CSS v4
+- Framer Motion
 
-## Run
+## Quick Start
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Visit [http://localhost:3000](http://localhost:3000)
+
+## Build for Production
+
+```bash
+npm run build
+npm start
+```
