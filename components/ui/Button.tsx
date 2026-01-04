@@ -1,33 +1,67 @@
-import { transitions } from "@/styles/design-tokens";
+import { typography } from "@/styles/design-tokens";
 import { ReactNode } from "react";
 
 interface ButtonProps {
   children: ReactNode;
   href: string;
-  variant?: "primary" | "secondary" | "accent";
+  variant?: "light" | "dark";
   className?: string;
 }
 
 export default function Button({
   children,
   href,
-  variant = "primary",
+  variant = "dark",
   className = "",
 }: ButtonProps) {
-  const baseStyles = `inline-block font-semibold ${transitions.default}`;
-
-  const variantStyles = {
-    primary:
-      "text-lg md:text-xl border-b-2 border-neutral-900 hover:border-[var(--accent-color)] hover:text-neutral-600",
-    secondary:
-      "text-base md:text-lg underline decoration-2 underline-offset-4 hover:no-underline hover:text-neutral-600",
-    accent:
-      "text-lg md:text-xl px-8 py-3 bg-[var(--accent-color)] text-neutral-900 font-bold hover:opacity-90 hover:scale-105 transform",
-  };
+  const isLight = variant === "light";
 
   return (
-    <a href={href} className={`${baseStyles} ${variantStyles[variant]} ${className}`}>
-      {children}
+    <a
+      href={href}
+      className={`font-display inline-block relative overflow-hidden uppercase ${className}`}
+      style={{
+        padding: '10px 24px',
+        fontSize: 'clamp(1.25rem, 2.5vw, 1.875rem)',
+        letterSpacing: '-0.02em',
+        lineHeight: '1',
+      }}
+    >
+      {/* Default state */}
+      <span
+        className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out"
+        style={{
+          backgroundColor: isLight ? 'var(--accent-color)' : '#171717',
+          color: isLight ? '#171717' : 'var(--accent-color)',
+          transform: 'translateY(0)',
+        }}
+      >
+        {children}
+      </span>
+
+      {/* Hover state - slides up from below */}
+      <span
+        className="absolute inset-0 flex items-center justify-center transition-transform duration-300 ease-out hover-state"
+        style={{
+          backgroundColor: isLight ? '#fafafa' : 'var(--accent-color)',
+          color: '#171717',
+          transform: 'translateY(100%)',
+        }}
+      >
+        {children}
+      </span>
+
+      {/* Invisible text for maintaining button dimensions */}
+      <span className="invisible">{children}</span>
+
+      <style jsx>{`
+        a:hover .hover-state {
+          transform: translateY(0) !important;
+        }
+        a:hover span:first-child {
+          transform: translateY(-100%) !important;
+        }
+      `}</style>
     </a>
   );
 }

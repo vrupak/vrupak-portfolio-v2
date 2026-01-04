@@ -27,7 +27,7 @@ export default function FeaturedWork() {
           </motion.h2>
 
           {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 lg:gap-x-28 gap-y-20 md:gap-y-24 mb-20 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-20 lg:gap-x-28 gap-y-20 md:gap-y-24 w-full">
             {featuredProjects.map((project, index) => (
               <motion.div
                 key={project.id}
@@ -53,9 +53,9 @@ export default function FeaturedWork() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-8 mb-8"
+            style={{ marginTop: '64px' }}
           >
-            <Button href="#work" variant="accent">
+            <Button href="#work" variant="light">
               All Work →
             </Button>
           </motion.div>

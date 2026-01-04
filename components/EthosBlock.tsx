@@ -60,7 +60,7 @@ export default function EthosBlocks() {
               <p
                 className={`${typography.body.xl} ${
                   idx === 0 ? colors.text.secondary : "text-neutral-300"
-                } max-w-4xl mb-12`}
+                } max-w-4xl`}
               >
                 {block.description}
               </p>
@@ -71,10 +71,11 @@ export default function EthosBlocks() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.3 }}
+                style={{ marginTop: '64px' }}
               >
                 <Button
                   href={block.ctaHref}
-                  variant={idx === 0 ? "secondary" : "accent"}
+                  variant={idx === 0 ? "dark" : "light"}
                 >
                   {block.ctaText} →
                 </Button>
