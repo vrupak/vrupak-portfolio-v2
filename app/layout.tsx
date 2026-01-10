@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { APP_CONFIG } from "@/constants";
 import { Black_Ops_One, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import CustomCursor from "@/components/ui/CustomCursor";
 
 const blackOps = Black_Ops_One({
   weight: "400",
@@ -31,7 +32,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${blackOps.variable} ${spaceGrotesk.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <CustomCursor variant="v1" />
+        {children}
+      </body>
     </html>
   );
 }

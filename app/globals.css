@@ -43,6 +43,14 @@ body {
   line-height: 1.6;
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  cursor: none;
+}
+
+/* Show default cursor on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  body {
+    cursor: auto;
+  }
 }
 
 /* Display font for headlines */
