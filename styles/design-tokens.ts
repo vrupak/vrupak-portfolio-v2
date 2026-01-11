@@ -31,24 +31,25 @@ export const typography = {
 
 export const colors = {
   text: {
-    primary: "text-neutral-900",
-    secondary: "text-neutral-600",
-    tertiary: "text-neutral-500",
-    inverse: "text-neutral-50",
+    primary: "text-white",
+    secondary: "text-[#0B9FBD]", // Electric Cyan
+    tertiary: "text-[#6C0E42]", // Plum Night
+    inverse: "text-black",
   },
   bg: {
-    primary: "bg-neutral-50",
-    secondary: "bg-neutral-100",
-    inverse: "bg-neutral-900",
-    dark: "bg-neutral-800",
+    primary: "bg-black",
+    secondary: "bg-[#025067]", // Deep Teal
+    inverse: "bg-white",
+    dark: "bg-black",
   },
   border: {
-    primary: "border-neutral-900",
-    secondary: "border-neutral-300",
-    light: "border-neutral-200",
+    primary: "border-[#0B9FBD]", // Electric Cyan
+    secondary: "border-[#6C0E42]", // Plum Night
+    light: "border-[#025067]", // Deep Teal
   },
   accent: {
-    primary: "text-[var(--accent-color)]",
+    primary: "text-[var(--accent-color)]", // Electric Cyan
+    secondary: "text-[#B31B6F]", // Vivid Magenta
     bg: "bg-[var(--accent-color)]",
     border: "border-[var(--accent-color)]",
     hover: "hover:text-[var(--accent-color)]",

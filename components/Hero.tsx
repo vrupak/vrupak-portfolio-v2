@@ -2,14 +2,12 @@
 "use client";
 
 import { heroContent } from "@/data/content";
-import { useCurrentTime } from "@/hooks/useCurrentTime";
 import { typography, colors, spacing } from "@/styles/design-tokens";
 import Container from "./ui/Container";
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 export default function Hero() {
-  const currentTime = useCurrentTime();
   const canvasRef = useRef(null);
   const animationRef = useRef(null);
   const glRef = useRef(null);
@@ -65,60 +63,96 @@ export default function Hero() {
     uniform vec2 u_pointer_position;
     uniform float u_scroll_progress;
 
-    vec2 rotate(vec2 uv, float th) {
-        return mat2(cos(th), sin(th), -sin(th), cos(th)) * uv;
-    }
-
-    float neuro_shape(vec2 uv, float t, float p) {
-        vec2 sine_acc = vec2(0.);
-        vec2 res = vec2(0.);
-        float scale = 8.;
-
-        for (int j = 0; j < 15; j++) {
-            uv = rotate(uv, 1.);
-            sine_acc = rotate(sine_acc, 1.);
-            vec2 layer = uv * scale + float(j) + sine_acc - t;
-            sine_acc += sin(layer) + 2.4 * p;
-            res += (.5 + .5 * cos(layer)) / scale;
-            scale *= (1.2);
-        }
-        return res.x + res.y;
-    }
-
     void main() {
-        vec2 uv = .5 * vUv;
-        uv.x *= u_ratio;
+        // Slow down time significantly (convert ms to seconds and scale)
+        float iTime = u_time * 0.0002;
 
-        vec2 pointer = vUv - u_pointer_position;
-        pointer.x *= u_ratio;
-        float p = clamp(length(pointer), 0., 1.);
-        p = .5 * pow(1. - p, 2.);
+        // Initial scale factor
+        float scale = 0.2;
+        float a;
 
-        float t = .001 * u_time;
-        vec3 color = vec3(0.);
+        // Centered coordinates (from -1 to 1)
+        vec2 p = (vUv * 2.0 - 1.0);
 
-        float noise = neuro_shape(uv, t, p);
+        // Adjust for aspect ratio and scale
+        p.x *= u_ratio;
+        p /= 0.7;
 
-        noise = 1.2 * pow(noise, 3.);
-        noise += pow(noise, 10.);
-        noise = max(.0, noise - .5);
-        noise *= (1. - length(vUv - .5));
+        // Diagonal vector for skewing (original singularity)
+        vec2 d = vec2(-1.0, 1.0);
 
-        // Cyan/blue/black color palette matching accent color (#00E5FF)
-        vec3 cyan = vec3(0.0, 0.898, 1.0); // Base cyan color
-        vec3 blue = vec3(0.0, 0.4, 0.8); // Blue tone
-        vec3 darkBlue = vec3(0.0, 0.1, 0.3); // Dark blue-black
+        // Blackhole center
+        vec2 b = p - scale * d;
 
-        // Mix colors based on noise intensity and position
-        color = mix(darkBlue, cyan, noise * 1.5);
-        color += blue * sin(3.0 * u_scroll_progress + 1.5) * 0.3;
+        // Rotate and apply perspective
+        vec2 c = p * mat2(1.0, 1.0, d / (0.1 + scale / dot(b, b)));
 
-        // Add some pure black in lower intensity areas
-        color = mix(vec3(0.0), color, smoothstep(0.0, 0.3, noise));
+        // Rotate into spiraling coordinates
+        float logLen = 0.5 * log(dot(c, c));
+        vec2 v = c * mat2(
+            cos(logLen + iTime * scale),
+            sin(logLen + iTime * scale),
+            -sin(logLen + iTime * scale),
+            cos(logLen + iTime * scale)
+        ) / scale;
 
-        color = color * noise;
+        // Waves cumulative total for coloring
+        vec2 w = vec2(0.0);
 
-        gl_FragColor = vec4(color, noise);
+        // Loop through waves
+        for(float i = 1.0; i < 9.0; i += 1.0) {
+            // Distort coordinates
+            v += 0.7 * sin(v.yx * i + iTime) / i + 0.5;
+            w += 1.0 + sin(v);
+        }
+
+        // Acretion disk radius
+        float diskRadius = length(sin(v / 0.3) * 0.4 + c * vec2(3.0 + d.x, 3.0 + d.y));
+
+        // Attenuation (distance-squared)
+        a = dot(c, c);
+
+        // Calculate base intensity
+        vec4 O = 1.0 - exp(-exp(c.x * vec4(0.6, -0.4, -1.0, 0.0))
+                   / w.xyyx
+                   / (2.0 + diskRadius * diskRadius / 4.0 - diskRadius)
+                   / (0.5 + 1.0 / a)
+                   / (0.03 + abs(length(p) - 0.7))
+             );
+
+        // Apply color palette: Deep Teal to Vivid Magenta gradient
+        vec3 deepTeal = vec3(0.008, 0.314, 0.404);      // #025067
+        vec3 electricCyan = vec3(0.043, 0.624, 0.741);  // #0B9FBD
+        vec3 vividMagenta = vec3(0.702, 0.106, 0.435);  // #B31B6F
+
+        // Create horizontal gradient from teal (left) to magenta (right)
+        float horizontalGradient = (p.x / u_ratio + 1.0) * 0.5;
+
+        // Mix teal and cyan for left side, cyan and magenta for right side
+        vec3 baseColor = mix(
+            mix(deepTeal, electricCyan, 0.6),
+            vividMagenta,
+            horizontalGradient
+        );
+
+        // Apply intensity variations
+        vec3 color = baseColor * (O.rgb + 0.5);
+
+        // Brighten the overall effect
+        color = color * 2.5;
+
+        // Make it visible across the screen with subtle vignette
+        float vignetteX = abs(vUv.x - 0.5) * 2.0;
+        float vignetteY = abs(vUv.y - 0.5) * 2.0;
+        float vignette = 1.0 - smoothstep(0.3, 1.2, max(vignetteX, vignetteY));
+
+        // Keep more brightness overall
+        color = mix(vec3(0.0), color, smoothstep(0.0, 0.4, O.a));
+
+        // Apply subtle vignette
+        color = color * (0.4 + vignette * 1.2);
+
+        gl_FragColor = vec4(color, O.a * 2.0);
     }
   `;
 
@@ -270,60 +304,70 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="min-h-screen flex items-center justify-center py-24 md:py-32 relative overflow-hidden bg-black">
-      {/* Neural Glow Background */}
+    <section className="h-screen flex items-stretch relative overflow-hidden bg-black">
+      {/* Singularity Effect Background */}
       <canvas
         ref={canvasRef}
-        className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-60"
+        className="absolute top-0 left-0 w-full h-full pointer-events-none"
         style={{ mixBlendMode: 'normal' }}
       />
 
-      <Container>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col items-center text-center relative z-10 w-full max-w-6xl mx-auto"
-        >
-          {/* Time Display */}
-          <motion.div variants={itemVariants} className="mb-12 md:mb-16">
-            <p className={`${typography.display.lg} ${colors.accent.primary} drop-shadow-[0_0_30px_rgba(var(--accent-rgb),0.5)]`}>
-              {currentTime}
-            </p>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 w-full h-full flex flex-col justify-between px-8 md:px-16 lg:px-24 py-16 md:py-20"
+      >
+        {/* Top Section */}
+        <div className="flex justify-between items-start w-full">
+          {/* Top Left - Name */}
+          <motion.div variants={itemVariants}>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl md:text-4xl lg:text-5xl text-[#025067] leading-none">//</span>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold text-white leading-none whitespace-nowrap tracking-tight uppercase">
+                VIDYA <span className="text-[#B31B6F] drop-shadow-[0_0_30px_rgba(179,27,111,0.6)]">RUPAK</span>
+              </h1>
+            </div>
           </motion.div>
 
-          {/* Main Headlines */}
-          <div className="flex flex-col space-y-6 md:space-y-8 mb-16 md:mb-20">
-            <motion.h1
-              variants={itemVariants}
-              className={`${typography.display.md} ${colors.text.primary}`}
-            >
-              I DO{" "}
-              <span className={`${colors.accent.primary} drop-shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)]`}>THINGS.</span>
-            </motion.h1>
-            <motion.h2
-              variants={itemVariants}
-              className={`${typography.display.md} ${colors.text.primary}`}
-            >
-              NEED THINGS{" "}
-              <span className={`${colors.accent.primary} drop-shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)]`}>DONE?</span>
-            </motion.h2>
-          </div>
-
-          {/* Supporting Content */}
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-col space-y-4 max-w-3xl"
-          >
-            <p className={`${typography.body.xl} ${colors.text.primary}`}>
+          {/* Top Right */}
+          <motion.div variants={itemVariants} className="text-right hidden lg:block">
+            <p className="text-sm lg:text-base text-white/90 whitespace-nowrap">
               {heroContent.services}
             </p>
-            <p className={`${typography.body.lg} ${colors.text.secondary}`}>
+          </motion.div>
+        </div>
+
+        {/* Center - Singularity Effect Space */}
+        <div className="flex-1" />
+
+        {/* Bottom Section */}
+        <div className="flex justify-between items-end w-full">
+          {/* Bottom Left */}
+          <motion.div variants={itemVariants} className="hidden lg:block">
+            <p className="text-sm lg:text-base text-white/80 whitespace-nowrap">
               {heroContent.bio}
             </p>
           </motion.div>
+
+          {/* Bottom Right - Tagline */}
+          <motion.div variants={itemVariants} className="text-right ml-auto">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-white leading-none whitespace-nowrap tracking-tight uppercase">
+              I DO <span className="text-[#0B9FBD] drop-shadow-[0_0_30px_rgba(11,159,189,0.6)]">THINGS.</span>
+            </h2>
+          </motion.div>
+        </div>
+
+        {/* Mobile/Tablet - Supporting text */}
+        <motion.div variants={itemVariants} className="lg:hidden mt-8 space-y-3">
+          <p className={`${typography.body.base} text-white/90`}>
+            {heroContent.services}
+          </p>
+          <p className={`${typography.body.sm} text-white/80`}>
+            {heroContent.bio}
+          </p>
         </motion.div>
-      </Container>
+      </motion.div>
     </section>
   );
 }
